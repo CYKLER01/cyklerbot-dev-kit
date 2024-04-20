@@ -21,6 +21,7 @@ here are all the keys you need to know.
   > {f"lvl{guild_id}{user_id}"} - fishing level
   > {f"sh{guild_id}{user_id}"} - shop
   > {f"mb{guild_id}{user_id}"} - money in bank
+  > {f"mblast{guild_id}{user_id}"} - recorded last time of bank checking
 
   > {f"{guild_id}xpearnings1"} - base message xp earnings
   > {f"{guild_id}xpearnings1"} - max message xp earnings
