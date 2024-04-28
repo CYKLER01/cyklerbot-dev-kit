@@ -1,6 +1,7 @@
 import json
 
 import discord
+from collections import Counter
 
 rcolor = [
     discord.Colour.purple(),
@@ -14,7 +15,6 @@ rcolor = [
     discord.Colour.dark_blue(),
     discord.Colour.dark_purple(),
     discord.Colour.magenta(),
-    discord.Colour.dark_magenta(),
     discord.Colour.gold(),
     discord.Colour.dark_gold(),
     discord.Colour.dark_orange(),
@@ -26,6 +26,41 @@ rcolor = [
     discord.Colour.blurple(),
     discord.Colour.greyple()
 ]
+
+def add_opening_brace(filename):
+  """Checks and adds an opening curly brace to the beginning of a file.
+
+  Args:
+    filename: The name of the file to modify.
+
+  Returns:
+    None
+  """
+  with open(filename, "r+") as f:
+    content = f.read()
+    if content[0] != "{":
+      content = "{" + content
+      f.seek(0)  # Move the pointer to the beginning of the file
+      f.write(content)
+
+def add_closing_brace(filename):
+  """Checks and adds a closing curly brace to the end of a file.
+
+  Args:
+    filename: The name of the file to modify.
+
+  Returns:
+    None
+  """
+  with open(filename, "r+") as f:
+    content = f.read()
+    if content[-1] != "}":
+      content = content + "}"
+      f.seek(0)  # Move the pointer to the beginning of the file
+      f.write(content)
+    
+add_closing_brace("database.txt")
+add_opening_brace("database.txt")
 
 def load_data():
     try:
@@ -77,3 +112,67 @@ def developer_check(id):
         if int(id) == i:
             return True
     return False
+
+def additem(tag,item,count):
+    try:
+      try:
+        data[f"{tag}"][item] += count
+      except:
+        data[f"{tag}"][item] = count
+    except:
+      try:
+        data[f"{tag}"][item] = data[f"i{tag}"][item]
+      except:
+        data[f"{tag}"][item] = {}
+      
+      try:
+        data[f"{tag}"][item] += count
+      except:
+        data[f"{tag}"][item] = count
+    save_data(data)
+
+def loadinv(tag):
+    temp = dict(data[tag])
+    for i in data[tag]:
+        if not data[tag][i] > 0:
+            temp.pop(i)
+    return Counter(temp)
+
+def createinv(tag):
+    try:
+        data[tag] = dict(Counter(data[f"i{tag[3:]}"]))
+        data[f"i{tag[3:]}"] = None
+    except:
+        data[tag] = {}
+    save_data(data)
+
+def profile_intialization_check(guild_id_and_tag):
+    try:
+        a = data['xp' + guild_id_and_tag]
+        if a < 1:
+            a = 1
+            data['xp' + guild_id_and_tag] = 1
+        b = data['lvl' + guild_id_and_tag]
+    except:
+        data['xp' + guild_id_and_tag] = 1
+        data['lvl' + guild_id_and_tag] = 1
+    try:
+        tryi = data["inv" + guild_id_and_tag]
+    except:
+        createinv("inv" + guild_id_and_tag)
+    try:
+        trym = data["m" + guild_id_and_tag]
+    except:
+        data["m" + guild_id_and_tag] = 0
+    try:
+        tryww = data["ww" + guild_id_and_tag]
+    except:
+        data['ww' + guild_id_and_tag] = []
+    try:
+        tryww = data["bm" + guild_id_and_tag]
+    except:
+        data['bm' + guild_id_and_tag] = 0
+    try:
+        money_in_bank = data["mb" + guild_id_and_tag]
+    except:
+        data['mb' + guild_id_and_tag] = 0
