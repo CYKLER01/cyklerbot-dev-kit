@@ -121,7 +121,7 @@ def additem(tag,item,count):
         data[f"{tag}"][item] = count
     except:
       try:
-        data[f"{tag}"][item] = data[f"i{tag}"][item]
+        data[f"{tag}"][item] = data[f"i{tag[2:-1]}"][item]
       except:
         data[f"{tag}"][item] = {}
       
